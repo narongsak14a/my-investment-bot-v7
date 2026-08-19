@@ -7,6 +7,7 @@ from youtube_transcript_api import YouTubeTranscriptApi
 
 # ==========================================
 # 1. ตั้งค่า API Key, Endpoints & Variables
+# https://dry-voice-2e82.narongsak14.workers.dev/
 # ==========================================
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 CLOUDFLARE_WORKER_URL = os.environ.get("CLOUDFLARE_WORKER_URL")
