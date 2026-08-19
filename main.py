@@ -315,7 +315,7 @@ def run_investment_ai_pipeline():
         # 🛠️ ใช้ Retry mechanism เมื่อเจอ Error 503
         response = generate_content_with_retry(
             client=client,
-            model="gemini-2.5-flash",
+            model="gemini-3.6-flash",
             prompt=macro_tech_prompt,
             max_retries=3,
             delay=10
