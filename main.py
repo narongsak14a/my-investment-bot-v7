@@ -106,6 +106,62 @@ def fetch_gold_analysis_detail():
             gold_report += f"\n⚠️ ไม่สามารถดึงข้อมูล XAUUSD ({tf_name}) ได้: {e}\n"
             
     return gold_report
+#-----------------------------------------------
+def fetch_btc_analysis_detail():
+    print("⏳ กำลังดึงสัญญาณเทคนิคอลเจาะบิทคอย (BTCUSD) บน Timeframe 1D และ 4H...")
+    
+    timeframes = {
+        "1D (ภาพรวมวัน)": Interval.INTERVAL_1_DAY,
+        "4H (จังหวะระยะสั้น)": Interval.INTERVAL_4_HOURS
+    }
+    
+    btc_report = "=== [การวิเคราะห์เจาะลึกทองคำ BTCUSD (CDC ActionZone + Stochastic 14, 3, 3)] ===\n"
+    
+    for tf_name, tf_interval in timeframes.items():
+        try:
+            handler = TA_Handler(
+                symbol="BTCUSD",
+                exchange="BINANCE",
+                screener="crypto",
+                interval=tf_interval
+            )
+            analysis = handler.get_analysis()
+            indicators = analysis.indicators
+            
+            close_price = indicators.get("close", 0)
+            ema12 = indicators.get("EMA12", 0)
+            ema26 = indicators.get("EMA26", 0)
+            
+            # ประเมินสภาวะ CDC ActionZone
+            if ema12 > ema26:
+                cdc_status = "🟢 BULLISH (โซนสีเขียว / ซื้อ-ถือครอง)"
+            else:
+                cdc_status = "🔴 BEARISH (โซนสีแดง / ขาย-พักเงิน)"
+                
+            # ดึงค่า Stochastic (%K, %D)
+            stoch_k = indicators.get("Stoch.K", 0)
+            stoch_d = indicators.get("Stoch.D", 0)
+            
+            stoch_status = "Neutral"
+            if stoch_k < 20:
+                stoch_status = "🔵 Oversold (ขายมากเกินไป - ลุ้นดีดกลับ/จังหวะตั้งรับ)"
+            elif stoch_k > 80:
+                stoch_status = "🟠 Overbought (ซื้อมากเกินไป - ระวังการย่อตัว)"
+            
+            summary_rec = analysis.summary.get('RECOMMENDATION', 'N/A')
+            
+            btc_report += (
+                f"\n📌 Timeframe: {tf_name}\n"
+                f"  - ราคาปัจจุบัน: {close_price:.2f}\n"
+                f"  - สัญญาณสรุป TradingView: [{summary_rec}]\n"
+                f"  - CDC ActionZone (EMA12/EMA26): {cdc_status} (EMA12: {ema12:.2f}, EMA26: {ema26:.2f})\n"
+                f"  - Stochastic (14, 3, 3): %K = {stoch_k:.2f}, %D = {stoch_d:.2f} [{stoch_status}]\n"
+            )
+        except Exception as e:
+            btc_report += f"\n⚠️ ไม่สามารถดึงข้อมูล XAUUSD ({tf_name}) ได้: {e}\n"
+            
+    return btc_report
+#------------------------------------------------
 
 def fetch_all_tradingview_signals():
     print("⏳ กำลังดึงสัญญาณเทคนิคอลเชิงลึกจาก TradingView...")
