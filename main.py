@@ -325,7 +325,7 @@ def run_investment_ai_pipeline():
         print("\n--- ✨ รายงานจาก Gemini ---")
         print(report_text)
 
-        print("\n📤 กำลังส่งรายงานไปยัง Cloudflare...")
+        print(f"🤖 กำลังส่งรายงานไปยัง Cloudflare ({worker_url})...")
         repo_name = os.environ.get("GITHUB_REPOSITORY", "narongsak14a/my-investment-bot-v7")
         header = (
             f"📦 Repository: {repo_name}\n"
